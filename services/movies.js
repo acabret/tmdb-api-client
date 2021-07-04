@@ -6,6 +6,7 @@ const baseURL = "https://api.themoviedb.org/3";
 
 const searchMovieBaseURL = `${baseURL}/search/movie`;
 const discoverMovieBaseURL = `${baseURL}/discover/movie`;
+const movieGenresBaseURL = `${baseURL}/genre/movie/list`;
 
 const queryMovies = ({ query, language = defaultLanguage }) => {
   const fullURL = `${searchMovieBaseURL}?api_key=${config.API_KEY}&query=${query}&language=${language}`;
@@ -19,19 +20,27 @@ const discoverMovies = ({
   genre,
   voteGte,
   voteLte,
-  dateGte
+  dateGte,
 }) => {
-  const sortBy = "&sort_by=vote_average.desc";
-  const dateGteKey = `&release_date.gte=${dateGte}`
-  const ratingLteKey = `&vote_average.lte=${voteLte}`;
-  const ratingGteKey = `&vote_average.gte=${voteGte}`;
+  const dateGteKey = dateGte ? `&release_date.gte=${dateGte}` : "";
+  const voteLteKey = voteLte ? `&vote_average.lte=${voteLte}` : "";
+  const voteGteKey = voteGte ? `&vote_average.gte=${voteGte}` : "";
+  const genreKey = genre ? `&with_genres=${genre}` : "";
   const languageKey = `&language=${language}`;
-  const genreKey = `&genre=${genre}`;
-  const qualityKeys = "&include_adult=false&page=1&vote_count.gte=1000"
-  const fullURL = `${discoverMovieBaseURL}?api_key=${config.API_KEY}${languageKey}${dateGteKey}${genreKey}${ratingGteKey}${ratingLteKey}${sortBy}${qualityKeys}`;
+  const defaultKeys =
+    "&include_adult=false&page=1&vote_count.gte=1000&sort_by=vote_average.desc";
+  const fullURL = `${discoverMovieBaseURL}?api_key=${config.API_KEY}${languageKey}${dateGteKey}${genreKey}${voteGteKey}${voteLteKey}${defaultKeys}`;
 
   console.log(fullURL);
   return axios.get(fullURL).then((response) => response.data);
 };
 
-module.exports = { queryMovies, discoverMovies };
+const getGenres = ({language = defaultLanguage}) => {
+  const languageKey = `&language=${language}`;
+  const fullURL = `${movieGenresBaseURL}?api_key=${config.API_KEY}${languageKey}`
+  return axios.get(fullURL).then(response => response.data)
+}
+
+
+
+module.exports = { queryMovies, discoverMovies, getGenres };

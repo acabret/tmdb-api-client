@@ -35,6 +35,7 @@ moviesRouter.get("/search", async (request, response) => {
 moviesRouter.get("/discover", async (request, response) => {
   const { genre, language, voteGte, voteLte, dateGte } = request.query;
 
+  console.log("genre keys",typeof genre);
   const results = await movieService.discoverMovies({
     genre,
     language,

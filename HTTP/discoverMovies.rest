@@ -1,0 +1,1 @@
+GET http://localhost:4000/api/movies/discover?genre=878&language=es-es&voteGte=5&voteLte=9&dateGte=2010

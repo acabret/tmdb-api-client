@@ -14,7 +14,7 @@ moviesRouter.get("/init", async (request, response) => {
     ).results;
     const selectedMovies = _.sampleSize(topMovies, 10);
 
-    return { name: genre.name, movies: [...selectedMovies] };
+    return {id:genre.id, name: genre.name, movies: [...selectedMovies] };
   });
 
   const resolvedSections = await Promise.all(promiseSections);

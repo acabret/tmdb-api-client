@@ -12,7 +12,7 @@ moviesRouter.get("/init", async (request, response) => {
     const topMovies = (
       await movieService.discoverMovies({ genre: genre.id, language })
     ).results;
-    const selectedMovies = _.sampleSize(topMovies, 10);
+    const selectedMovies = _.sampleSize(topMovies, 12);
 
     return {id:genre.id, name: genre.name, movies: [...selectedMovies] };
   });

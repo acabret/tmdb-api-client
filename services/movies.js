@@ -28,7 +28,7 @@ const discoverMovies = ({
   const genreKey = genre ? `&with_genres=${genre}` : "";
   const languageKey = `&language=${language}`;
   const defaultKeys =
-    "&include_adult=false&page=1&vote_count.gte=1000&sort_by=vote_average.desc";
+    "&include_adult=false&page=1&vote_count.gte=500&sort_by=vote_average.desc";
   const fullURL = `${discoverMovieBaseURL}?api_key=${config.API_KEY}${languageKey}${dateGteKey}${genreKey}${voteGteKey}${voteLteKey}${defaultKeys}`;
 
   console.log(fullURL);

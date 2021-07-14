@@ -44,9 +44,10 @@ moviesRouter.get("/discover", async (request, response) => {
     dateLte
   });
 
+  const selectedMovies = _.sampleSize(rawResults.results, 12);
   // const searchSection = { id: genre }
 
-  return response.json(results);
+  return response.json(selectedMovies);
 });
 
 module.exports = moviesRouter;

@@ -21,26 +21,29 @@ const discoverMovies = ({
   voteGte,
   voteLte,
   dateGte,
+  dateLte,
 }) => {
-  const dateGteKey = dateGte ? `&release_date.gte=${dateGte}` : "";
+
+  console.log(`peli entre ${dateGte} y ${dateLte}`);
+  const dateLteKey = dateLte ? `&primary_release_date.lte=${dateLte}` : "";
+  // const dateLteKey = "";
+  const dateGteKey = dateGte ? `&primary_release_date.gte=${dateGte}` : "";
   const voteLteKey = voteLte ? `&vote_average.lte=${voteLte}` : "";
   const voteGteKey = voteGte ? `&vote_average.gte=${voteGte}` : "";
   const genreKey = genre ? `&with_genres=${genre}` : "";
   const languageKey = `&language=${language}`;
   const defaultKeys =
     "&include_adult=false&page=1&vote_count.gte=500&sort_by=vote_average.desc";
-  const fullURL = `${discoverMovieBaseURL}?api_key=${config.API_KEY}${languageKey}${dateGteKey}${genreKey}${voteGteKey}${voteLteKey}${defaultKeys}`;
+  const fullURL = `${discoverMovieBaseURL}?api_key=${config.API_KEY}${languageKey}${dateGteKey}${dateLteKey}${genreKey}${voteGteKey}${voteLteKey}${defaultKeys}`;
 
   console.log(fullURL);
   return axios.get(fullURL).then((response) => response.data);
 };
 
-const getGenres = ({language = defaultLanguage}) => {
+const getGenres = ({ language = defaultLanguage }) => {
   const languageKey = `&language=${language}`;
-  const fullURL = `${movieGenresBaseURL}?api_key=${config.API_KEY}${languageKey}`
-  return axios.get(fullURL).then(response => response.data)
-}
-
-
+  const fullURL = `${movieGenresBaseURL}?api_key=${config.API_KEY}${languageKey}`;
+  return axios.get(fullURL).then((response) => response.data);
+};
 
 module.exports = { queryMovies, discoverMovies, getGenres };

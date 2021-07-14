@@ -32,16 +32,19 @@ moviesRouter.get("/search", async (request, response) => {
 });
 
 moviesRouter.get("/discover", async (request, response) => {
-  const { genre, language, voteGte, voteLte, dateGte } = request.query;
+  const { genre, language, voteGte, voteLte, dateGte, dateLte } = request.query;
 
   console.log("genre keys", typeof genre);
-  const results = await movieService.discoverMovies({
+  const rawResults = await movieService.discoverMovies({
     genre,
     language,
     voteGte,
     voteLte,
     dateGte,
+    dateLte
   });
+
+  // const searchSection = { id: genre }
 
   return response.json(results);
 });

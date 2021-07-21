@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "build:ui": "rm -rf /build && cd ../muvinext-client && npm run build && cp -r build ../tmdb-api-client"
+    "build:ui": "rm -rf /build && cd ../muvinext-react && npm run build && cp -r build ../tmdb-api-client"
   },
   "author": "acabret",
   "license": "GPL-3.0",

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "startt": "node index.js",
     "dev": "nodemon index.js",
     "build:ui": "rm -rf /build && cd ../muvinext-react && npm run build && cp -r build ../tmdb-api-client"
   },

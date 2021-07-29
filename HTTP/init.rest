@@ -1,1 +1,2 @@
 GET http://localhost:4000/api/movies/init
+"rm -rf build && cd ../part2-notes/ && npm run build --prod && cp -r build ../notes-backend",

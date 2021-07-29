@@ -32,8 +32,10 @@ const discoverMovies = ({
   const voteGteKey = voteGte ? `&vote_average.gte=${voteGte}` : "";
   const genreKey = genre ? `&with_genres=${genre}` : "";
   const languageKey = `&language=${language}`;
+    // const defaultKeys =
+  //   "&include_adult=false&page=1&vote_count.gte=500&sort_by=vote_average.desc";
   const defaultKeys =
-    "&include_adult=false&page=1&vote_count.gte=500&sort_by=vote_average.desc";
+  "&include_adult=false&page=1&vote_count.gte=500";
   const fullURL = `${discoverMovieBaseURL}?api_key=${config.API_KEY}${languageKey}${dateGteKey}${dateLteKey}${genreKey}${voteGteKey}${voteLteKey}${defaultKeys}`;
 
   console.log(fullURL);

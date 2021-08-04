@@ -15,7 +15,7 @@ const queryMovies = ({ query, language = defaultLanguage }) => {
   return axios.get(fullURL).then((response) => response.data);
 };
 
-const discoverMovies = ({
+const discoverMovies = async ({
   language = defaultLanguage,
   genre,
   voteGte,
@@ -23,23 +23,33 @@ const discoverMovies = ({
   dateGte,
   dateLte,
 }) => {
-
-  console.log(`peli entre ${dateGte} y ${dateLte}`);
   const dateLteKey = dateLte ? `&primary_release_date.lte=${dateLte}` : "";
-  // const dateLteKey = "";
   const dateGteKey = dateGte ? `&primary_release_date.gte=${dateGte}` : "";
   const voteLteKey = voteLte ? `&vote_average.lte=${voteLte}` : "";
   const voteGteKey = voteGte ? `&vote_average.gte=${voteGte}` : "";
   const genreKey = genre ? `&with_genres=${genre}` : "";
   const languageKey = `&language=${language}`;
-    // const defaultKeys =
+  // const defaultKeys =
   //   "&include_adult=false&page=1&vote_count.gte=500&sort_by=vote_average.desc";
-  const defaultKeys =
-  "&include_adult=false&page=1&vote_count.gte=500";
+  const defaultKeys = "&include_adult=false&page=1&vote_count.gte=500";
   const fullURL = `${discoverMovieBaseURL}?api_key=${config.API_KEY}${languageKey}${dateGteKey}${dateLteKey}${genreKey}${voteGteKey}${voteLteKey}${defaultKeys}`;
 
   console.log(fullURL);
-  return axios.get(fullURL).then((response) => response.data);
+  // return axios.get(fullURL).then((response) => response.data);
+
+  const firstBatch = await axios.get(fullURL).then((response) => response.data);
+
+  console.log("paginas ", firstBatch.total_pages);
+
+  if (firstBatch.total_pages > 1) {
+    const secondBatch = await axios
+      .get(`${fullURL}&page=2`)
+      .then((response) => response.data);
+
+    firstBatch.results.push(...secondBatch.results);
+  }
+
+  return firstBatch;
 };
 
 const getGenres = ({ language = defaultLanguage }) => {

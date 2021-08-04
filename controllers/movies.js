@@ -22,14 +22,13 @@ moviesRouter.get("/init", async (request, response) => {
   return response.json({ genres, sections:resolvedSections });
 });
 
-moviesRouter.get("/search", async (request, response) => {
-  // const { query, language } = request.body
-  const { query, language } = request.query;
+// moviesRouter.get("/search", async (request, response) => {
+//   const { query, language } = request.query;
 
-  const results = await movieService.queryMovies({ query, language });
+//   const results = await movieService.queryMovies({ query, language });
 
-  return response.json(results);
-});
+//   return response.json(results);
+// });
 
 moviesRouter.get("/discover", async (request, response) => {
   const { genre, language, voteGte, voteLte, dateGte, dateLte } = request.query;
@@ -44,8 +43,9 @@ moviesRouter.get("/discover", async (request, response) => {
     dateLte
   });
 
+  console.log("lista length", rawResults.results.length);
+
   const selectedMovies = _.sampleSize(rawResults.results, 12);
-  // const searchSection = { id: genre }
 
   return response.json(selectedMovies);
 });

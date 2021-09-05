@@ -4,6 +4,7 @@ const _ = require("lodash");
 
 moviesRouter.get("/init", async (request, response) => {
   const { language } = request.query;
+  console.log("lang received", language);
   const genres = (await movieService.getGenres({ language })).genres;
   const selectedGenres = _.sampleSize(genres, 4);
 
@@ -33,7 +34,6 @@ moviesRouter.get("/init", async (request, response) => {
 moviesRouter.get("/discover", async (request, response) => {
   const { genre, language, voteGte, voteLte, dateGte, dateLte } = request.query;
 
-  console.log("genre keys", typeof genre);
   const rawResults = await movieService.discoverMovies({
     genre,
     language,

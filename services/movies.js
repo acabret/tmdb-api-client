@@ -1,14 +1,16 @@
 const axios = require("axios");
 const config = require("../utils/config");
 
-const defaultLanguage = "en-US";
 const baseURL = "https://api.themoviedb.org/3";
 
 const searchMovieBaseURL = `${baseURL}/search/movie`;
 const discoverMovieBaseURL = `${baseURL}/discover/movie`;
 const movieGenresBaseURL = `${baseURL}/genre/movie/list`;
 
-const queryMovies = ({ query, language = defaultLanguage }) => {
+const queryMovies = ({ query, language }) => {
+  const languageKey = language.toLocaleLowerCase().startsWith("es")
+  ? `&language=es-es`
+  : `&language=en-us`;
   const fullURL = `${searchMovieBaseURL}?api_key=${config.API_KEY}&query=${query}&language=${language}`;
   console.log(fullURL);
 
@@ -16,7 +18,7 @@ const queryMovies = ({ query, language = defaultLanguage }) => {
 };
 
 const discoverMovies = async ({
-  language = defaultLanguage,
+  language,
   genre,
   voteGte,
   voteLte,
@@ -28,7 +30,9 @@ const discoverMovies = async ({
   const voteLteKey = voteLte ? `&vote_average.lte=${voteLte}` : "";
   const voteGteKey = voteGte ? `&vote_average.gte=${voteGte}` : "";
   const genreKey = genre ? `&with_genres=${genre}` : "";
-  const languageKey = `&language=${language}`;
+  const languageKey = language.toLocaleLowerCase().startsWith("es")
+  ? `&language=es-es`
+  : `&language=en-us`;
   // const defaultKeys =
   //   "&include_adult=false&page=1&vote_count.gte=500&sort_by=vote_average.desc";
   const defaultKeys = "&include_adult=false&page=1&vote_count.gte=500";
@@ -52,8 +56,10 @@ const discoverMovies = async ({
   return firstBatch;
 };
 
-const getGenres = ({ language = defaultLanguage }) => {
-  const languageKey = `&language=${language}`;
+const getGenres = ({ language }) => {
+  const languageKey = language.toLocaleLowerCase().startsWith("es")
+    ? `&language=es-es`
+    : `&language=en-us`;
   const fullURL = `${movieGenresBaseURL}?api_key=${config.API_KEY}${languageKey}`;
   return axios.get(fullURL).then((response) => response.data);
 };

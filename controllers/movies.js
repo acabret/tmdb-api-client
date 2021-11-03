@@ -4,11 +4,10 @@ const _ = require("lodash");
 
 moviesRouter.get("/init", async (request, response) => {
   const { language } = request.query;
-  console.log("lang received", language);
+
   const genres = (await movieService.getGenres({ language })).genres;
   const selectedGenres = _.sampleSize(genres, 4);
 
-  // console.log("generos seleccionados",selectedGenres);
   const promiseSections = selectedGenres.map(async (genre) => {
     const topMovies = (
       await movieService.discoverMovies({ genre: genre.id, language })
@@ -23,13 +22,16 @@ moviesRouter.get("/init", async (request, response) => {
   return response.json({ genres, sections:resolvedSections });
 });
 
-// moviesRouter.get("/search", async (request, response) => {
-//   const { query, language } = request.query;
+moviesRouter.get("/find/:movieId", async (request, response) => {
+  const { movieId } = request.params;
+  const { language } = request.query;
+  console.log(movieId, language)
+  //validar parametro de numeros/string
 
-//   const results = await movieService.queryMovies({ query, language });
+  const movie = await movieService.getMovie({ movieId, language });
 
-//   return response.json(results);
-// });
+  return response.json(movie);
+});
 
 moviesRouter.get("/discover", async (request, response) => {
   const { genre, language, voteGte, voteLte, dateGte, dateLte } = request.query;

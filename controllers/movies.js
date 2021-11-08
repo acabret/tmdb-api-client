@@ -14,23 +14,32 @@ moviesRouter.get("/init", async (request, response) => {
     ).results;
     const selectedMovies = _.sampleSize(topMovies, 12);
 
-    return {id:genre.id, name: genre.name, movies: [...selectedMovies] };
+    return { id: genre.id, name: genre.name, movies: [...selectedMovies] };
   });
 
   const resolvedSections = await Promise.all(promiseSections);
 
-  return response.json({ genres, sections:resolvedSections });
+  return response.json({ genres, sections: resolvedSections });
 });
 
 moviesRouter.get("/find/:movieId", async (request, response) => {
   const { movieId } = request.params;
   const { language } = request.query;
-  console.log(movieId, language)
+  console.log(movieId, language);
   //validar parametro de numeros/string
+  const movieRequest = await movieService.getMovie({ movieId, language });
 
-  const movie = await movieService.getMovie({ movieId, language });
+  if (movieRequest.status == 404) {
+    return response
+      .status(404)
+      .json({ status: 404, message: movieRequest.statusText });
+  }
 
-  return response.json(movie);
+  return response.json({
+    status: movieRequest.status,
+    message: movieRequest.statusText,
+    payload: movieRequest.data,
+  });
 });
 
 moviesRouter.get("/discover", async (request, response) => {
@@ -42,7 +51,7 @@ moviesRouter.get("/discover", async (request, response) => {
     voteGte,
     voteLte,
     dateGte,
-    dateLte
+    dateLte,
   });
 
   console.log("lista length", rawResults.results.length);

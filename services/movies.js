@@ -6,7 +6,7 @@ const baseURL = "https://api.themoviedb.org/3";
 const searchMovieBaseURL = `${baseURL}/search/movie`;
 const discoverMovieBaseURL = `${baseURL}/discover/movie`;
 const movieGenresBaseURL = `${baseURL}/genre/movie/list`;
-const getMovieBaseURL = `${baseURL}//movie`;
+const getMovieBaseURL = `${baseURL}/movie`;
 
 const queryMovies = ({ query, language }) => {
   const languageKey = language.toLocaleLowerCase().startsWith("es")
@@ -19,13 +19,14 @@ const queryMovies = ({ query, language }) => {
 };
 
 const getMovie = async ({ language, movieId }) => {
+  console.log("lang definidio?", language);
   const languageKey = language.toLocaleLowerCase().startsWith("es")
     ? `&language=es-es`
     : `&language=en-us`;
 
   const fullURL = `${getMovieBaseURL}/${movieId}?api_key=${config.API_KEY}${languageKey}`;
 
-  return axios.get(fullURL).then((response) => response.data);
+  return axios.get(fullURL).catch((err) => err.response);
 };
 
 const discoverMovies = async ({
